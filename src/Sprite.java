@@ -25,6 +25,7 @@ public class Sprite {
         loadDefaultImage();
     }
 
+
     public void draw(Graphics g, ImageObserver observer, int x, int y) {
         // with the Point class, note that pos.getX() returns a double, but
         // pos.x reliably returns an int. https://stackoverflow.com/a/30220114/4655368
