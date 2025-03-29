@@ -55,4 +55,16 @@ public class CombatState implements GameState {
     public void exit() {
 
     }
+
+    public void performAction() {
+
+    }
+
+    public ArrayList<CombatEntity> getSide1() {
+        return this.side1;
+    }
+    public ArrayList<CombatEntity> getSide2() {
+        return this.side2;
+    }
+
 }

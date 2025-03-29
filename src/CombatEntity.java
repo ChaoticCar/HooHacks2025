@@ -8,4 +8,6 @@ public interface CombatEntity {
     public int getStrength();
     public int getDefense();
     public ArrayList<Item> getInventory();
+
+    public String getName();
 }

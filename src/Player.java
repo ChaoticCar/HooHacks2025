@@ -145,4 +145,9 @@ public class Player implements Entity, CombatEntity {
     public ArrayList<Item> getInventory() {
         return inventory;
     }
+
+    @Override
+    public String getName() {
+        return "Player";
+    }
 }
