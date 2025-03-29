@@ -1,9 +1,13 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import src.Game;
 import src.GameCanvas;
 
 class Application {
+
+    static Game game;
+
     public static void main(String[] args) {
         // invokeLater() is used here to prevent our graphics processing from
         // blocking the GUI. https://stackoverflow.com/a/22534931/4655368
@@ -24,7 +28,8 @@ class Application {
 
         // create the jpanel to draw on.
         // this also initializes the game loop
-        GameCanvas board = new GameCanvas();
+        game = new Game();
+        GameCanvas board = new GameCanvas(game);
         // add the jpanel to the window
         window.add(board);
         // pass keyboard inputs to the jpanel

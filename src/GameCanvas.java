@@ -29,9 +29,15 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
     // keep a reference to the timer object that triggers actionPerformed() in
     // case we need access to it in another method
     private Timer timer;
+
+    Game game;
+    Player player;
  
 
-    public GameCanvas(){
+    public GameCanvas(Game game){
+
+        this.game = game;
+
         // set the game board size
         setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
         // set the game board background color
@@ -62,9 +68,6 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
 
         // prevent the player from disappearing off the board
         player.tick();
-
-        // give the player points for collecting coins
-        collectCoins();
 
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
@@ -105,6 +108,22 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
     @Override
     public void keyPressed(KeyEvent e) {
         // TODO Auto-generated method stub
+        int key = e.getKeyCode();
+
+        // depending on which arrow key was pressed, we're going to move the player by
+        // one whole tile for this input
+        if (key == KeyEvent.VK_UP) {
+            game.handleInput(true, false, false, false);
+        }
+        if (key == KeyEvent.VK_RIGHT) {
+            game.handleInput(false, false, true, false);
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            game.handleInput(true, true, false, false);
+        }
+        if (key == KeyEvent.VK_LEFT) {
+            game.handleInput(true, false, false, true);
+        }
         throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
     }
 
