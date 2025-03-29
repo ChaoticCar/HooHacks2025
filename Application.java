@@ -16,7 +16,7 @@ class Application {
     
     private static void initWindow() {
         // create a window frame and set the title in the toolbar
-        JFrame window = new JFrame("Can't Stop, Won't Stop, GameStop");
+        JFrame window = new JFrame("GUI Window");
         // when we close the window, stop the app
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
