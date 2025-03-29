@@ -26,6 +26,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private int pWidth = 338;
     private final int horizon = height/2;
 
+    private int pOffset = horizon - pHeight + 64;
+
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
@@ -35,7 +37,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private Timer timer;
 
     Game game;
-    //Player player;
+    Player player;
 
     public Screen(Game game){
 
@@ -58,7 +60,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         g.fillRect(0, horizon, width, 3); // Draws a black line
 
         for (Sprite sprite : game.getSprites()) {
-            sprite.draw(g, null, 0, horizon - pHeight + 64);
+            xVal = sprite.getX();
+            yVal = sprite.getY();
+            sprite.draw(g, null, xVal, pOffset - yVal);
         }
     }
 
