@@ -1,4 +1,5 @@
-import java.awt.*;
+package src;
+import java.awt.Canvas;
 
 public class View {
 
