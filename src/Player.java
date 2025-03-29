@@ -17,7 +17,9 @@ public class Player implements Entity, CombatEntity {
     // image that represents the player's position on the board
     private BufferedImage image;
     // current position of the player on the board grid
-    private Point pos;
+    //private Point pos;
+    private int posX;
+    private int posY;
     // keep track of the player's score
     private int score;
 
@@ -28,17 +30,21 @@ public class Player implements Entity, CombatEntity {
         //loadImage();
 
         // initialize the state
-        pos = new Point(0, 0);
+        posX = 0;
+        posY = 0;
         score = 0;
         inventory.add(Item.SWORD);
     }
 
-    public Point getPosition() {
-        return pos;
+
+    public int getX() {
+        return posX;
+    }
+    public int getY() {
+        return posY;
     }
 
-    public int getX() { return pos.x; }
-    public void setX(int x) { pos.x = x; }
+    public void setX(int x) { posX = x; }
 
 
     /*
@@ -110,10 +116,6 @@ public class Player implements Entity, CombatEntity {
 
     public void addScore(int amount) {
         score += amount;
-    }
-
-    public Point getPos() {
-        return pos;
     }
 
     @Override
