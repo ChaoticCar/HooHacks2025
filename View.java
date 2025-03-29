@@ -1,4 +1,8 @@
-package PACKAGE_NAME;
+import java.awt.*;
 
 public class View {
+
+    Canvas canvas;
+
+
 }
