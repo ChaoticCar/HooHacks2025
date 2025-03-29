@@ -14,21 +14,16 @@ public class Player implements Entity {
     // image that represents the player's position on the board
     private BufferedImage image;
     // current position of the player on the board grid
-    private Point pos;
     // keep track of the player's score
     private int score;
+
 
     public Player() {
         // load the assets
         //loadImage();
 
         // initialize the state
-        pos = new Point(0, 0);
         score = 0;
-    }
-
-    public Point getPosition() {
-        return pos;
     }
 
     /*
@@ -100,10 +95,6 @@ public class Player implements Entity {
 
     public void addScore(int amount) {
         score += amount;
-    }
-
-    public Point getPos() {
-        return pos;
     }
 
 }

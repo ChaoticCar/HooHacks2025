@@ -19,9 +19,13 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     // controls the delay between each tick in ms
     private final int DELAY = 25;
     // controls the size of the board
-    public static final int TILE_SIZE = 50;
-    public static final int ROWS = 12;
-    public static final int COLUMNS = 18;
+    public static final int TILE_SIZE = 120;
+    private final int width = 1920;
+    private final int height = 1080;
+    private int pHeight = 338;
+    private int pWidth = 338;
+    private final int horizon = height/2;
+
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
@@ -32,20 +36,15 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
 
     Game game;
     //Player player;
- 
 
     public Screen(Game game){
 
         this.game = game;
 
         // set the game board size
-        setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
+        setPreferredSize(new Dimension(width, height));
         // set the game board background color
         setBackground(new Color(232, 232, 232));
-
-        // initialize the game state
-        //player = new Player();
-
 
         // this timer will call the actionPerformed() method every DELAY ms
         timer = new Timer(DELAY, this);
@@ -55,13 +54,16 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(Color.RED);
-        g.fillRect(50, 50, 100, 100); // Draws a red square
+        g.setColor(Color.BLACK);
+        g.fillRect(0, horizon, width, 3); // Draws a black line
 
         for (Sprite sprite : game.getSprites()) {
-            sprite.draw(g, null, 0, 0);
+            sprite.draw(g, null, 0, horizon - pHeight + 64);
         }
+    }
 
+    public int getHorizon() {
+        return horizon;
     }
 
     @Override

@@ -9,7 +9,6 @@ public class Game {
     private Player player;
 
     public Game () {
-        player = new Player();
         sprites = new ArrayList<>();
 
         Sprite playerSprite = new Sprite("images\\player.png", player);
