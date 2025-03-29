@@ -19,6 +19,8 @@ public class Game {
         sprites = new ArrayList<>();
         gameState = new OverworldState(this);
 
+        player = new Player();
+
         Sprite playerSprite = new Sprite("images\\player.png", player);
 
         sprites.add(playerSprite);

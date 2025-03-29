@@ -60,8 +60,8 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         g.fillRect(0, horizon, width, 3); // Draws a black line
 
         for (Sprite sprite : game.getSprites()) {
-            xVal = sprite.getX();
-            yVal = sprite.getY();
+            int xVal = sprite.getX();
+            int yVal = sprite.getY();
             sprite.draw(g, null, xVal, pOffset - yVal);
         }
     }

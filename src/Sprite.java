@@ -20,6 +20,7 @@ public class Sprite {
 
         this.defaultImgPath = imgPath;
         this.entity = entity;
+        System.out.println(entity);
 
         // load assets
         loadDefaultImage();
