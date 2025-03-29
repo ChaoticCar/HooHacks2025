@@ -1,6 +1,8 @@
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import src.GameCanvas;
+
 class Application {
     public static void main(String[] args) {
         // invokeLater() is used here to prevent our graphics processing from

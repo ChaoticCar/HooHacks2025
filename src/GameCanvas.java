@@ -1,3 +1,5 @@
+package src;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -36,7 +38,8 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
         setBackground(new Color(232, 232, 232));
 
         // initialize the game state
-      
+        player = new Player();
+
 
         // this timer will call the actionPerformed() method every DELAY ms
         timer = new Timer(DELAY, this);
@@ -49,6 +52,23 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
         g.setColor(Color.RED);
         g.fillRect(50, 50, 100, 100); // Draws a red square
 
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // this method is called by the timer every DELAY ms.
+        // use this space to update the state of your game or animation
+        // before the graphics are redrawn.
+
+        // prevent the player from disappearing off the board
+        player.tick();
+
+        // give the player points for collecting coins
+        collectCoins();
+
+        // calling repaint() will trigger paintComponent() to run again,
+        // which will refresh/redraw the graphics.
+        repaint();
     }
 
     @Override
@@ -94,9 +114,5 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
         throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'actionPerformed'");
-    }
+    
 }
