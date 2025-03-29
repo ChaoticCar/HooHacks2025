@@ -27,6 +27,7 @@ class Application {
         // create the jpanel to draw on.
         // this also initializes the game loop
         game = new Game();
+
         Screen board = new Screen(game);
         // add the jpanel to the window
         window.add(board);
