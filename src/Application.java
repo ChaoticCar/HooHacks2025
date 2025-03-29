@@ -26,8 +26,9 @@ class Application {
 
         // create the jpanel to draw on.
         // this also initializes the game loop
-        game = new Game();
-        Screen board = new Screen(game);
+        LLMInterface llmPort = new LLMInterface();
+        game = new Game(llmPort);
+        Screen board = new Screen(game, llmPort);
         // add the jpanel to the window
         window.add(board);
         // pass keyboard inputs to the jpanel

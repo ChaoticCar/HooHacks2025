@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 public class Game {
 
+    private LLMInterface llmInterface;
+
     private GameState gameState;
 
     private ArrayList<Sprite> sprites;
 
     private Player player;
 
-    public Game () {
+    public Game (LLMInterface llmInterface) {
+
+        this.llmInterface = llmInterface;
+
         sprites = new ArrayList<>();
         gameState = new OverworldState(this);
 

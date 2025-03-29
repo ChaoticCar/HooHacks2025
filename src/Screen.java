@@ -39,7 +39,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     Game game;
     Player player;
 
-    public Screen(Game game){
+    public Screen(Game game, LLMInterface llmInterface){
 
         this.game = game;
 
