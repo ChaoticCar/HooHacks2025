@@ -1,7 +1,6 @@
-package src;
+//package src;
 
-import javax.swing.JFrame;
-import javax.swing.SwingUtilities;
+import javax.swing.*;
 
 class Application {
 
