@@ -108,7 +108,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
@@ -119,24 +119,24 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // depending on which arrow key was pressed, we're going to move the player by
         // one whole tile for this input
         if (key == KeyEvent.VK_UP) {
-            game.handleInput(true, false, false, false);
+            game.handleInput(GameInput.UP);
         }
         if (key == KeyEvent.VK_RIGHT) {
-            game.handleInput(false, false, true, false);
+            game.handleInput(GameInput.RIGHT);
         }
         if (key == KeyEvent.VK_DOWN) {
-            game.handleInput(true, true, false, false);
+            game.handleInput(GameInput.DOWN);
         }
         if (key == KeyEvent.VK_LEFT) {
-            game.handleInput(true, false, false, true);
+            game.handleInput(GameInput.LEFT);
         }
-        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 
     

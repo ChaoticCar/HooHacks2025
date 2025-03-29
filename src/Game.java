@@ -4,12 +4,15 @@ import java.util.ArrayList;
 
 public class Game {
 
+    private GameState gameState;
+
     private ArrayList<Sprite> sprites;
 
     private Player player;
 
     public Game () {
         sprites = new ArrayList<>();
+        gameState = new OverworldState(this);
 
         Sprite playerSprite = new Sprite("images\\player.png", player);
 
@@ -17,17 +20,36 @@ public class Game {
 
     }
 
+    public Player getPlayer() {
+        return player;
+    }
     public ArrayList<Sprite> getSprites() {
         return sprites;
     }
 
-    public void handleInput(boolean dirUp, boolean dirDown, boolean dirRight, boolean dirLeft) {
+    public void handleInput(GameInput input) {
 
         // TODO: replace with game logic to decide if player moves
-        if (true) {
-            if (dirDown) {
-                //player.moveDown();
+        gameState.handleInput(input);
+        /*switch (gameState.getGameStateName()) {
+            case GameStateName.OVERWORLD: {
+                if (true) {
+                    if (dirDown) {
+
+                        //player.moveDown();
+                    }
+                }
+                break;
+            } case GameStateName.COMBAT: {
+
+                break;
+            } default: {
+                System.out.println("game state switch is incomplete!");
             }
-        }
+        }*/
+    }
+
+    public GameStateName getGameStateName() {
+        return gameState.getGameStateName();
     }
 }
