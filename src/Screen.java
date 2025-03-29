@@ -14,7 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
-public class GameCanvas extends JPanel implements ActionListener, KeyListener, MouseListener {
+public class Screen extends JPanel implements ActionListener, KeyListener, MouseListener {
 
     // controls the delay between each tick in ms
     private final int DELAY = 25;
@@ -34,7 +34,7 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener, M
     Player player;
  
 
-    public GameCanvas(Game game){
+    public Screen(Game game){
 
         this.game = game;
 

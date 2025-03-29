@@ -2,7 +2,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import src.Game;
-import src.GameCanvas;
+import src.Screen;
 
 class Application {
 
@@ -29,7 +29,7 @@ class Application {
         // create the jpanel to draw on.
         // this also initializes the game loop
         game = new Game();
-        GameCanvas board = new GameCanvas(game);
+        Screen board = new Screen(game);
         // add the jpanel to the window
         window.add(board);
         // pass keyboard inputs to the jpanel
