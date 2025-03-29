@@ -12,7 +12,7 @@ import javax.imageio.ImageIO;
 
 
 
-public class Player {
+public class Player implements Entity {
 
     // image that represents the player's position on the board
     private BufferedImage image;
@@ -23,7 +23,7 @@ public class Player {
 
     public Player() {
         // load the assets
-        loadImage();
+        //loadImage();
 
         // initialize the state
         pos = new Point(0, 0);
@@ -34,6 +34,7 @@ public class Player {
         return pos;
     }
 
+    /*
     private void loadImage() {
         try {
             // you can use just the filename if the image file is in your
@@ -94,7 +95,7 @@ public class Player {
         } else if (pos.y >= Screen.ROWS) {
             pos.y = Screen.ROWS - 1;
         }
-    }
+    }*/
 
     public String getScore() {
         return String.valueOf(score);

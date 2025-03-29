@@ -1,8 +1,7 @@
+package src;
+
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
-import src.Game;
-import src.Screen;
 
 class Application {
 

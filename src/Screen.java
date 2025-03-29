@@ -58,6 +58,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         g.setColor(Color.RED);
         g.fillRect(50, 50, 100, 100); // Draws a red square
 
+        for (Sprite sprite : game.getSprites()) {
+            sprite.draw(g, null, 0, 0);
+        }
+
     }
 
     @Override
