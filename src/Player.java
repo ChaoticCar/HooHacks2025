@@ -1,5 +1,4 @@
 //package src;
-
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -9,8 +8,6 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-
-
 
 public class Player implements Entity {
 
