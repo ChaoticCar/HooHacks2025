@@ -30,6 +30,10 @@ public class Player {
         score = 0;
     }
 
+    public Point getPosition() {
+        return pos;
+    }
+
     private void loadImage() {
         try {
             // you can use just the filename if the image file is in your

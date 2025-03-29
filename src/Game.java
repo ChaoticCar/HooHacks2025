@@ -2,6 +2,8 @@ package src;
 
 public class Game {
 
+    private Sprite[] sprites;
+
     private Player player;
 
     public Game () {

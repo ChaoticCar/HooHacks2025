@@ -2,6 +2,7 @@
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,8 +19,17 @@ public class Sprite {
         this.defaultImgPath = imgPath;
     }
 
-    public void draw(int x, int y) {
-
+    public void draw(Graphics g, ImageObserver observer, int x, int y) {
+        // with the Point class, note that pos.getX() returns a double, but
+        // pos.x reliably returns an int. https://stackoverflow.com/a/30220114/4655368
+        // this is also where we translate board grid position into a canvas pixel
+        // position by multiplying by the tile size.
+        g.drawImage(
+                image,
+                x * Screen.TILE_SIZE,
+                y * Screen.TILE_SIZE,
+                observer
+        );
     }
 
     private void loadImage() {

@@ -31,7 +31,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private Timer timer;
 
     Game game;
-    Player player;
+    //Player player;
  
 
     public Screen(Game game){
@@ -44,7 +44,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         setBackground(new Color(232, 232, 232));
 
         // initialize the game state
-        player = new Player();
+        //player = new Player();
 
 
         // this timer will call the actionPerformed() method every DELAY ms
@@ -67,7 +67,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // before the graphics are redrawn.
 
         // prevent the player from disappearing off the board
-        player.tick();
+        //player.tick();
 
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
