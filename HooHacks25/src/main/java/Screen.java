@@ -173,6 +173,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             game.handleInput(GameInput.UP);
         }
         else if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
+            // TODO: move the player moving logic inside the game-state
             movePlayer(TILE_SIZE);
             game.handleInput(GameInput.RIGHT);
         }
@@ -180,6 +181,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             game.handleInput(GameInput.DOWN);
         }
         else if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+            // TODO: move the player moving logic inside the game-state
             movePlayer(-TILE_SIZE);
             game.handleInput(GameInput.LEFT);
         }
