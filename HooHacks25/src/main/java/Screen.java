@@ -25,7 +25,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private int pHeight = 338;
     private int pWidth = 338;
     private final int horizon = height / 2;
-
+    private double isFlipped;
     private int pOffset = horizon - pHeight + 64;
 
     private final int textLineOffset = 15;
@@ -104,8 +104,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             int xVal = sprite.getX();
             int yVal = sprite.getY();
             if (sprite.isPlayer() && movingLeft) {
+                isFlipped = .35;
                 drawMirroredSprite(g, sprite, xVal, pOffset - yVal);
             } else {
+                isFlipped = 1;
                 sprite.draw(g, null, xVal, pOffset - yVal);
             }
         }
@@ -153,7 +155,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private void drawHealthBar(Graphics g2d) {
         int barWidth = pWidth / 2;
         int barHeight = 16;
-        int x = player.getX() + 38;
+        int x = (int)(player.getX() + (pWidth/2) - isFlipped * 156) + 16;
         int y = height - 32 - 800 + 16;
         int max = player.getMaxHealth();
         int health = player.getHealth();
