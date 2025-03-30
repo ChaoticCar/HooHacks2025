@@ -59,30 +59,29 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         this.button2 = button2;
         this.button3 = button3;
 
-        //setLayout(null);
+        setLayout(null);
         button1.setFocusable(false);
         button2.setFocusable(false);
         button3.setFocusable(false);
-
 
         add(button1);
         add(button2);
         add(button3);
 
         // Set button bounds (x, y, width, height)
-        /*button1.setBounds(50, height - 350, 150, 40);
+        button1.setBounds(50, height - 350, 150, 40);
         button2.setBounds(250, height - 350, 150, 40);
-        button3.setBounds(450, height - 350, 150, 40);*/
+        button3.setBounds(450, height - 350, 150, 40);
 
         // again, sorry for this
-        //SituationGen.initialize();
+        SituationGen.initialize();
 
         // Add action listeners for button presses
-        //button1.addActionListener(this);
-        //button2.addActionListener(this);
-        //button3.addActionListener(this);
+        button1.addActionListener(this);
+        button2.addActionListener(this);
+        button3.addActionListener(this);
 
-        //button1.setText("Attack");
+        button1.setText("Attack");
 
         // set the game board size
         setPreferredSize(new Dimension(width, height));
@@ -135,10 +134,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         }
         drawHealthBar(g);
 
-        /*ArrayList<String> actions = SituationGen.getPlayerActions();
+        ArrayList<String> actions = SituationGen.getPlayerActions();
         button1.setText(actions.get(0));
         button2.setText(actions.get(1));
-        button3.setText(actions.get(2));*/
+        button3.setText(actions.get(2));
     }
 
     private void drawMirroredSprite(Graphics g, Sprite sprite, int x, int y) {
@@ -192,7 +191,24 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
 
     private void startCombat() {
         // Logic to start combat
-        String scenario = SituationGen.run(0, player, game.getMonster()); // Start with player's turn and no current monster
+        String scenario = SituationGen.run(0, player, game.getMonster(), "Attack"); // Start with player's turn and no current monster
+        String[] words = scenario.split(" ");
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            builder.append(words[i]).append(" ");
+            if (i % 30 == 25) {
+                builder.append("\n");
+            }
+        }
+        scenario = builder.toString();
+
+        updateScenario(scenario, true); // Update the scenario for the player
+    }
+
+    private void continueCombat(String playerAction) {
+        // Logic to start next round of combat
+        String scenario = SituationGen.run(SituationGen.getTurnCount() + 1, player, game.getMonster(), playerAction); // Start with player's turn and no current monster
         String[] words = scenario.split(" ");
         StringBuilder builder = new StringBuilder();
 
@@ -219,6 +235,10 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // calling repaint() will trigger paintComponent() to run again,
         // which will refresh/redraw the graphics.
         repaint();
+    }
+
+    public void handleButton1(ActionEvent e) {
+
     }
 
     @Override

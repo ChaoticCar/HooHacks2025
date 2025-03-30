@@ -36,17 +36,24 @@ public class SituationGen {
         return playerActions;
     }
 
+    public static int getTurnCount() {
+        return turnCounter;
+    }
+
     private static GoogleAiGeminiChatModel gemini = GoogleAiGeminiChatModel.builder()
             .apiKey(APIKey.GEMINI_APIKey)
             .modelName("gemini-1.5-flash")
             .build();;
 
-    public static String run(int turn, Player player, Hostile monster) {
+    private static CombatResultTools combatResultTools;
+    private static SituationAssistant gameAssistant;
+
+    public static String run(int turn, Player player, Hostile monster, String playerAction) {
         currentMonster = monster;
 
-        CombatResultTools combatResultTools = new CombatResultTools(player, monster);
+        combatResultTools = new CombatResultTools(player, monster);
 
-        SituationAssistant gameAssistant = AiServices.builder(SituationAssistant.class)
+        gameAssistant = AiServices.builder(SituationAssistant.class)
                 .chatLanguageModel(gemini)
                 .tools(combatResultTools)
                 .build();
@@ -58,7 +65,7 @@ public class SituationGen {
         int d20Roll = rollD20();
         System.out.println("Simulated d20 Roll: " + d20Roll);
 
-        String prompt = createScenarioPrompt(d20Roll, turn, currentMonster);
+        String prompt = createScenarioPrompt(d20Roll, turn, currentMonster, playerAction);
         System.out.println("Sending Prompt to Gemini:\n\"" + prompt + "\"\n---");
 
         CountDownLatch latch = new CountDownLatch(1);
@@ -99,22 +106,22 @@ public class SituationGen {
         return ThreadLocalRandom.current().nextInt(1, 21);
     }
 
-    private static String createScenarioPrompt(int rollResult, int turn, Hostile monster) {
+    private static String createScenarioPrompt(int rollResult, int turn, Hostile monster, String playerAction) {
         if (turn % 2 == 0) {
             return String.format(
                     "You are a creative Dungeons & Dragons Dungeon Master. " +
-                            "It's my turn in combat. I wield a sword and rolled a %d on a D20. " +
+                            "It's my turn in combat. I wield a sword, chose \"%s\", and rolled a %d on a D20. " +
                             "The higher the roll, the more likely my attack succeeds. " +
                             "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
                             "damage done, and any environmental details that enhance the scene. " +
                             "Provide three options for my next move, and call tool methods to update" +
-                            " the game state. This is turn %d.", rollResult, monster.getName(), turn
+                            " the game state. This is turn %d.", playerAction, rollResult, monster.getName(), turn
             );
         } else {
             return String.format(
                     "You are a creative Dungeons & Dragons Dungeon Master. " +
                             "It's my opponent's turn in combat. They are a fearsome %s and rolled a %d on a D20. " +
-                            "The higher the roll, the more likely their attack succeeds. " +
+                            "I chose \"%s\". The higher the roll, the more likely their attack succeeds. " +
                             "Describe their attack, including its effectiveness, impact on me, " +
                             "damage done, and any environmental details that enhance the scene. " +
                             "Provide three options for my next move, and call. This is turn %d.", monster.getName(), rollResult, turn
