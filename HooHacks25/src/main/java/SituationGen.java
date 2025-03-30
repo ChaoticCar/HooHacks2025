@@ -79,7 +79,8 @@ public class SituationGen {
                             "It's my turn in combat. I wield a sword and rolled a %d on a D20. " +
                             "The higher the roll, the more likely my attack succeeds. " +
                             "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
-                            "and any environmental details that enhance the scene. This is turn %d.", rollResult, monster, turn
+                            "damage done, and any environmental details that enhance the scene. " +
+                            "Provide three options for my next move. This is turn %d.", rollResult, monster, turn
             );
         } else {
             return String.format(
@@ -87,7 +88,8 @@ public class SituationGen {
                             "It's my opponent's turn in combat. They are a fearsome %s and rolled a %d on a D20. " +
                             "The higher the roll, the more likely their attack succeeds. " +
                             "Describe their attack, including its effectiveness, impact on me, " +
-                            "and any environmental details that enhance the scene. This is turn %d.", monster, rollResult, turn
+                            "damage done, and any environmental details that enhance the scene. " +
+                            "Provide three options for my next move. This is turn %d.", monster, rollResult, turn
             );
         }
     }
