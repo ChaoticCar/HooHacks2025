@@ -1,4 +1,5 @@
 .idea/
+.idea/misc.xml
 *.iws
 *.iml
 *.ipr
@@ -8,9 +9,16 @@ out/
 
 ### Gradle """
 !**/.gradle
+HooHacks25/.gradle
 !**/.build
+HooHacks25/.build
+HooHacks25/build
+
 !**/gradle
+HooHacks25/gradle
+
 !**/gradlew
+HooHacks25/gradlew
 
 ### VS Code ###
 .vscode/
