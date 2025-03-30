@@ -17,10 +17,23 @@ public class SituationGen {
     private static Hostile currentMonster;
     private static int turnCounter = 0;
 
+    private static ArrayList<String> playerActions = new ArrayList<>();
+
     public static void main(String[] args) {
         //String scenario = run(0, null);    // Start the battle
         //System.out.println("\nFinal Scenario:\n" + scenario);
         // Generate the image based on the scenario and save it in the image folder
+    }
+
+    // sorry for this
+    public static void initialize() {
+        playerActions.add("Attack");
+        playerActions.add("");
+        playerActions.add("");
+    }
+
+    public static ArrayList<String> getPlayerActions() {
+        return playerActions;
     }
 
     private static GoogleAiGeminiChatModel gemini = GoogleAiGeminiChatModel.builder()
@@ -161,7 +174,9 @@ public class SituationGen {
 
         @Tool("Set player's next actions")
         public void setPlayerAction(String action1, String action2, String action3) {
-
+            playerActions.set(0, action1);
+            playerActions.set(1, action2);
+            playerActions.set(2, action3);
         }
 
         /*
