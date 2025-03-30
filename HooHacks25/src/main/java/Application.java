@@ -15,7 +15,7 @@ class Application {
         // just know that when main runs it will call initWindow() once.
         SwingUtilities.invokeLater(Application::initWindow);
     }
-    
+
     private static void initWindow() {
         // create a window frame and set the title in the toolbar
         JFrame window = new JFrame("GUI Window");
@@ -27,14 +27,21 @@ class Application {
         LLMAPIConnection connection = new GeminiAPIConnection();
         LLMInterface llmPort = connection.getLLMPort();
         game = new Game(llmPort);
-        Screen board = new Screen(game, llmPort);
+
+        // Initialize buttons
+        JButton button1 = new JButton("Button 1");
+        JButton button2 = new JButton("Button 2");
+        JButton button3 = new JButton("Button 3");
+
+        Screen board = new Screen(game, llmPort, button1, button2, button3);
         // add the jpanel to the window
+
         window.add(board);
         // pass keyboard inputs to the jpanel
         window.addKeyListener(board);
-        
+
         // don't allow the user to resize the window
-        window.setResizable(false);
+        window.setResizable(true);
         // fit the window size around the components (just our jpanel).
         // pack() should be called after setResizable() to avoid issues on some platforms
         window.pack();
@@ -44,5 +51,5 @@ class Application {
         window.setVisible(true);
     }
 
-    
+
 }

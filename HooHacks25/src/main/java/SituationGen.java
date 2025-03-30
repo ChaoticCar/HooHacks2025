@@ -1,28 +1,41 @@
+import dev.langchain4j.agent.tool.P;
+import dev.langchain4j.agent.tool.Tool;
 import dev.langchain4j.model.chat.StreamingChatLanguageModel;
 import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
+import dev.langchain4j.model.googleai.GoogleAiGeminiChatModel;
 import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
+import dev.langchain4j.service.AiServices;
 
+import javax.swing.*;
+import java.util.ArrayList;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class SituationGen {
 
-    private static String currentMonster;
+    private static Hostile currentMonster;
     private static int turnCounter = 0;
 
     public static void main(String[] args) {
-        String scenario = run(0, null);    // Start the battle
-        System.out.println("\nFinal Scenario:\n" + scenario);
+        //String scenario = run(0, null);    // Start the battle
+        //System.out.println("\nFinal Scenario:\n" + scenario);
         // Generate the image based on the scenario and save it in the image folder
     }
 
-    public static String run(int turn, String monster) {
+    private static GoogleAiGeminiChatModel gemini = GoogleAiGeminiChatModel.builder()
+            .apiKey(APIKey.GEMINI_APIKey)
+            .modelName("gemini-1.5-flash")
+            .build();;
+
+    public static String run(int turn, Player player, Hostile monster) {
         currentMonster = monster;
 
-        StreamingChatLanguageModel gemini = GoogleAiGeminiStreamingChatModel.builder()
-                .apiKey(APIKey.PROKEY)
-                .modelName("gemini-2.0-flash")
+        CombatResultTools combatResultTools = new CombatResultTools(player, monster);
+
+        SituationAssistant gameAssistant = AiServices.builder(SituationAssistant.class)
+                .chatLanguageModel(gemini)
+                .tools(combatResultTools)
                 .build();
 
         if (turn == 0) {
@@ -38,7 +51,8 @@ public class SituationGen {
         CountDownLatch latch = new CountDownLatch(1);
         StringBuilder scenario = new StringBuilder();
 
-        gemini.chat(prompt, new StreamingChatResponseHandler() {
+        turnCounter++;
+        return gameAssistant.chat(prompt/*, new StreamingChatResponseHandler() {
             @Override
             public void onPartialResponse(String partialResponse) {
                 System.out.print(partialResponse);
@@ -55,24 +69,24 @@ public class SituationGen {
                 error.printStackTrace();
                 latch.countDown();
             }
-        });
+        }*/);
 
-        try {
+        /*try {
             latch.await();
         } catch (InterruptedException e) {
             e.printStackTrace();
             return "Error: " + e.getMessage();
-        }
+        }*/
 
-        turnCounter++;
-        return scenario.toString();
+        //turnCounter++;
+        //return scenario.toString();
     }
 
     private static int rollD20() {
         return ThreadLocalRandom.current().nextInt(1, 21);
     }
 
-    private static String createScenarioPrompt(int rollResult, int turn, String monster) {
+    private static String createScenarioPrompt(int rollResult, int turn, Hostile monster) {
         if (turn % 2 == 0) {
             return String.format(
                     "You are a creative Dungeons & Dragons Dungeon Master. " +
@@ -80,7 +94,8 @@ public class SituationGen {
                             "The higher the roll, the more likely my attack succeeds. " +
                             "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
                             "damage done, and any environmental details that enhance the scene. " +
-                            "Provide three options for my next move. This is turn %d.", rollResult, monster, turn
+                            "Provide three options for my next move, and call tool methods to update" +
+                            " the game state. This is turn %d.", rollResult, monster.getName(), turn
             );
         } else {
             return String.format(
@@ -89,12 +104,116 @@ public class SituationGen {
                             "The higher the roll, the more likely their attack succeeds. " +
                             "Describe their attack, including its effectiveness, impact on me, " +
                             "damage done, and any environmental details that enhance the scene. " +
-                            "Provide three options for my next move. This is turn %d.", monster, rollResult, turn
+                            "Provide three options for my next move, and call. This is turn %d.", monster.getName(), rollResult, turn
             );
         }
     }
 
-    private static String getMonster() {
+    private static Hostile getMonster() {
         return currentMonster;
+    }
+
+    private static interface SituationAssistant {
+        String chat(String userMessage);
+    }
+
+    private static class CombatResultTools {
+
+        CombatEntity player;
+        CombatEntity monster;
+        //ArrayList<CombatEntity> monsters;
+
+        CombatResultTools(CombatEntity player, CombatEntity monster) {
+            this.player = player;
+            this.monster = monster;
+            //this.monsters = monsters;
+        }
+
+        @Tool("Get health stat of player")
+        public int getPlayerHealth () {
+            return player.getHealth();
+        }
+
+        @Tool("Get strength stat of player")
+        public int getPlayerStrength () {
+            return player.getStrength();
+        }
+
+        @Tool("Get defense stat of player")
+        public int getPlayerDefense () {
+            return player.getDefense();
+        }
+
+        @Tool("Get health stat of monster")
+        public int getMonsterHealth () {
+            return monster.getHealth();
+        }
+
+        @Tool("Get defense stat of monster")
+        public int getMonsterStrength () {
+            return monster.getStrength();
+        }
+
+        @Tool("Get defense stat of monster")
+        public int getMonsterDefense () {
+            return monster.getDefense();
+        }
+
+        @Tool("Set player's next actions")
+        public void setPlayerAction(String action1, String action2, String action3) {
+
+        }
+
+        /*
+        For if we have multiple monsters
+        @Tool("Get health stat of i-th monster (of monsters.get(i))")
+        public int getMonsterHealth (int i) {
+            return monsters.get(i).getHealth();
+        }
+
+        @Tool("Get defense stat of i-th monster (of monsters.get(i))")
+        public int getMonsterStrength (int i) {
+            return monsters.get(i).getStrength();
+        }
+
+        @Tool("Get defense stat of i-th monster (of monsters.get(i))")
+        public int getMonsterDefense (int i) {
+            return monsters.get(i).getDefense();
+        }*/
+
+        @Tool("Inflict a given amount of damage to monster")
+        public void inflictDamageToMonster(@P("damage") int damage) {
+            //int index = (int) i;
+            //int dmg = (int) damage;
+
+
+            monster.receiveDamage(damage);
+            System.out.println("Inflicted " + damage + " damage on " + monster.getName());
+            //return "Inflicted " + dmg + " damage";
+        }
+
+        /*@Tool("Cause target at a given index of monsters to receive a given amount of damage")
+        public void inflictDamageToMonster(@P("index") int i, @P("damage") int damage) {
+            //int index = (int) i;
+            //int dmg = (int) damage;
+
+            if (index >= monsters.size()) {
+                System.out.println("Index out of bounds");
+                index = monsters.size() - 1;
+            }
+
+            monsters.get(index).receiveDamage(dmg);
+            System.out.println("Inflicted " + dmg + " damage");
+            //return "Inflicted " + dmg + " damage";
+        }*/
+
+        @Tool("Inflict damage on player")
+        public void inflictDamageToPlayer(@P("damage") int damage) {
+            //int dmg = (int) damage;
+            player.receiveDamage(damage);
+            System.out.println("Inflicted " + damage + " damage");
+            //return "Inflicted " + damage + " damage";
+        }
+
     }
 }

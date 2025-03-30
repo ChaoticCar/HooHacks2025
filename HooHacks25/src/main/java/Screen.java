@@ -11,8 +11,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import javax.swing.JPanel;
-import javax.swing.Timer;
+import javax.swing.*;
 
 public class Screen extends JPanel implements ActionListener, KeyListener, MouseListener {
 
@@ -28,6 +27,13 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
 
     private int pOffset = horizon - pHeight + 64;
 
+    private final int textLineOffset = 15;
+
+    private JButton button1;
+    private JButton button2;
+    private JButton button3;
+
+
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
 
@@ -41,9 +47,30 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private String monsterScenario = "";
     private boolean movingLeft = false;
 
-    public Screen(Game game, LLMInterface llmInterface) {
+    public Screen(Game game, LLMInterface llmInterface, JButton button1, JButton button2, JButton button3) {
         this.game = game;
         this.player = game.getPlayer(); // Assuming Game class has a getPlayer() method
+
+        this.button1 = button1;
+        this.button2 = button2;
+        this.button3 = button3;
+
+        setLayout(null);
+        add(button1);
+        add(button2);
+        add(button3);
+
+        // Set button bounds (x, y, width, height)
+        button1.setBounds(50, height - 350, 150, 40);
+        button2.setBounds(250, height - 350, 150, 40);
+        button3.setBounds(450, height - 350, 150, 40);
+
+        // Add action listeners for button presses
+        button1.addActionListener(this);
+        button2.addActionListener(this);
+        button3.addActionListener(this);
+
+        button1.setText("Attack");
 
         // set the game board size
         setPreferredSize(new Dimension(width, height));
@@ -78,7 +105,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             g.setColor(Color.BLACK);
             g.drawRect(10, 10, width / 2 - 20, 100);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
-            g.drawString(playerScenario, 20, 50);
+            drawString(g, playerScenario, 20, 50);
+            //g.drawString(playerScenario, 20, 50);
+
         }
 
         // Draw the monster scenario text box if there is text
@@ -88,8 +117,11 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             g.setColor(Color.BLACK);
             g.drawRect(width / 2 + 10, 10, width / 2 - 20, 100);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
-            g.drawString(monsterScenario, width / 2 + 20, 50);
+            //g.drawString(monsterScenario, width / 2 + 20, 50);
+            drawString(g, monsterScenario, width / 2 + 20, 50);
+
         }
+        drawHealthBar(g);
     }
 
     private void drawMirroredSprite(Graphics g, Sprite sprite, int x, int y) {
@@ -99,6 +131,33 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         g2d.scale(-1, 1); // Flip horizontally
         sprite.draw(g2d, null, 0, 0); // Draw the sprite at the new origin
         g2d.setTransform(originalTransform); // Restore original transform
+    }
+
+    private void drawHealthBar(Graphics g2d) {
+        int barWidth = pWidth / 2;
+        int barHeight = 16;
+        int x = player.getX() + 38;
+        int y = height - 32 - 800 + 16;
+        int max = player.getMaxHealth();
+        int health = player.getHealth();
+
+        System.out.println("Max: " + max + " Curr: " + health);
+        // Background of HP bar
+        g2d.setColor(Color.GRAY);
+        g2d.fillRect(x, y, barWidth, barHeight);
+
+        // Current HP
+        g2d.setColor(Color.RED);
+        g2d.fillRect(x, y, (barWidth * (health / max)), barHeight);
+
+        // Border of the HP bar
+        g2d.setColor(Color.BLACK);
+        g2d.drawRect(x, y, barWidth, barHeight);
+
+        // HP number
+        g2d.setFont(new Font("Arial", Font.PLAIN, 14));
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("HP: " + player.getHealth(), x + barWidth + 10, y + barHeight - 5);
     }
 
     public void updateScenario(String scenario, boolean isPlayerTurn) {
@@ -117,7 +176,18 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
 
     private void startCombat() {
         // Logic to start combat
-        String scenario = SituationGen.run(0, null); // Start with player's turn and no current monster
+        String scenario = SituationGen.run(0, player, game.getMonster()); // Start with player's turn and no current monster
+        String[] words = scenario.split(" ");
+        StringBuilder builder = new StringBuilder();
+
+        for (int i = 0; i < words.length; i++) {
+            builder.append(words[i]).append(" ");
+            if (i % 30 == 25) {
+                builder.append("\n");
+            }
+        }
+        scenario = builder.toString();
+
         updateScenario(scenario, true); // Update the scenario for the player
     }
 
@@ -194,5 +264,17 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
         // throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+    }
+
+    public void drawString(Graphics g, String text, int x, int y) {
+        if (text.contains("\n")) {
+            String[] texts = text.split("\n");
+            for (String txt : texts) {
+                g.drawString(txt, x, y);
+                y += textLineOffset;
+            }
+        } else {
+            g.drawString(text, x, y);
+        }
     }
 }

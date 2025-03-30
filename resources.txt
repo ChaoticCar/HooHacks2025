@@ -1,2 +1,4 @@
 https://console.groq.com/docs/langchain#quick-start-3-minutes-to-hello-world
 https://stackoverflow.com/questions/776180/how-to-make-canvas-with-swing
+
+https://stackoverflow.com/questions/15998118/newline-character-in-a-text-using-canvas-drawtext
