@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class OverworldState implements GameState {
 
     Game game;
@@ -24,7 +26,7 @@ public class OverworldState implements GameState {
     }
 
     @Override
-    public void handleInput(GameInput input) {
+    public GameState handleInput(GameInput input) {
 
         // TODO: replace with game logic to decide if player moves
         if (true) {
@@ -44,10 +46,22 @@ public class OverworldState implements GameState {
                 case BUTTON_A: {
                 }
                 case BUTTON_B: {
+                } break;
+                case BUTTON_X: {
+                    ArrayList<CombatEntity> playerSide = new ArrayList<>();
+                    playerSide.add(player);
+
+                    ArrayList<CombatEntity> enemySide = new ArrayList<>(game.getHostiles());
+                    System.out.println("Entering combat phase");
+
+                    return new CombatState(game, playerSide, enemySide);
+                } case BUTTON_Y: {
+
                 }
             }
-                //player.moveDown();
         }
+
+        return null;
     }
 
     @Override

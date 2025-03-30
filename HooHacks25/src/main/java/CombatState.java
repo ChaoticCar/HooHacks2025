@@ -47,8 +47,29 @@ public class CombatState implements GameState {
     }
 
     @Override
-    public void handleInput(GameInput input) {
-        
+    public GameState handleInput(GameInput input) {
+        switch (input) {
+            case UP -> {
+            }
+            case DOWN -> {
+            }
+            case LEFT -> {
+            }
+            case RIGHT -> {
+            }
+            case BUTTON_A -> {
+            }
+            case BUTTON_B -> {
+
+            }
+            case BUTTON_X -> {
+
+                game.getLLMInterface().startCombatAction(this, side1.get(0), side2, ActionType.ATTACK, Item.SWORD, getD20());
+            }
+            case BUTTON_Y -> {
+            }
+        }
+        return null;
     }
 
     @Override
@@ -65,6 +86,10 @@ public class CombatState implements GameState {
     }
     public ArrayList<CombatEntity> getSide2() {
         return this.side2;
+    }
+
+    private int getD20() {
+        return (int) (Math.random() * 20) + 1;
     }
 
 }

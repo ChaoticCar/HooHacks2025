@@ -4,5 +4,7 @@ public enum GameInput {
     LEFT,
     RIGHT,
     BUTTON_A,
-    BUTTON_B
+    BUTTON_B,
+    BUTTON_X,
+    BUTTON_Y
 }

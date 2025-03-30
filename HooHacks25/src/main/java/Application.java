@@ -24,7 +24,8 @@ class Application {
 
         // create the jpanel to draw on.
         // this also initializes the game loop
-        LLMInterface llmPort = new LLMInterface();
+        LLMAPIConnection connection = new GeminiAPIConnection();
+        LLMInterface llmPort = connection.getLLMPort();
         game = new Game(llmPort);
         Screen board = new Screen(game, llmPort);
         // add the jpanel to the window

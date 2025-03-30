@@ -125,14 +125,17 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         if (key == KeyEvent.VK_UP) {
             game.handleInput(GameInput.UP);
         }
-        if (key == KeyEvent.VK_RIGHT) {
+        else if (key == KeyEvent.VK_RIGHT) {
             game.handleInput(GameInput.RIGHT);
         }
-        if (key == KeyEvent.VK_DOWN) {
+        else if (key == KeyEvent.VK_DOWN) {
             game.handleInput(GameInput.DOWN);
         }
-        if (key == KeyEvent.VK_LEFT) {
+        else if (key == KeyEvent.VK_LEFT) {
             game.handleInput(GameInput.LEFT);
+        }
+        else if (key == KeyEvent.VK_I) {
+            game.handleInput(GameInput.BUTTON_X);
         }
         //throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
     }

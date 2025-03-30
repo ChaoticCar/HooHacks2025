@@ -2,16 +2,18 @@ import java.util.ArrayList;
 
 public class LLMInterface {
 
-    // LLMConnection llmConnection;
-    /*
-    LLMInterface(LLMConnection llmConnection) {
-        this.llmConnection = llmCon
+    LLMAPIConnection llmAPIConnection;
+
+    LLMInterface(LLMAPIConnection llmAPIConnection) {
+        this.llmAPIConnection = llmAPIConnection;
     }
 
-     */
-
     public void startCombatAction(CombatState combatState, CombatEntity initiator,
-                                  CombatEntity target, ActionType action, Item item) {
+                                  ArrayList<CombatEntity> targets, ActionType action, Item item, int D20) {
+        String description = getCombatDescription(combatState, initiator, targets, action, item);
+        System.out.println("Description: " + description);
+
+        llmAPIConnection.executeCombatResult(description, initiator, targets, D20);
 
     }
 
@@ -36,12 +38,13 @@ public class LLMInterface {
                     }
                 }
                 description.append(initiator.getName())
-                       .append(" decided to attack ")
+                       .append("(the initiator) decided to attack ")
                        .append(targetsName);
                 if (item != null) {
                     description.append(" using a ").append(getItemName(item));
                 }
                 description.append(".");
+                break;
             }
             case ITEM: {
                 description.append(initiator.getName())
@@ -50,13 +53,13 @@ public class LLMInterface {
                 if (!targets.isEmpty()) {
                     String targetsName = "";
                     if (targets.size() == 1) {
-                        targetsName = targets.get(0).getName();
+                        targetsName = targets.get(0).getName() + " (the 1 target)";
                     } else if (targets.size() == 2) {
-                        targetsName = targets.get(0).getName() + " and " + targets.get(1).getName();
+                        targetsName = targets.get(0).getName() + " and " + targets.get(1).getName() + " (the 2 targets)";
                     } else {
                         for (int i = 0; i < targets.size(); i++) {
                             if (i == targets.size() - 1) {
-                                targetsName += "and " + targets.get(i).getName();
+                                targetsName += "and " + targets.get(i).getName() + " (the " + targets.size() + " targets)";
                             } else {
                                 targetsName += targets.get(i).getName() + ", ";
                             }
@@ -65,15 +68,18 @@ public class LLMInterface {
                     description.append(" on ").append(targetsName);
                 }
                 description.append(".");
+                break;
             }
             case RUN: {
                 description.append(initiator.getName())
                         .append(" decided to run away from combat.");
+                break;
             }
             default: {
                 description.append("Unknown action performed by ")
                         .append(initiator.getName())
                         .append(".");
+                break;
             }
         }
         System.out.println(description);

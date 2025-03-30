@@ -4,6 +4,6 @@ public interface GameState {
 
     public void enterState();
     public void update();
-    public void handleInput(GameInput input);
+    public GameState handleInput(GameInput input);
     public void exit();
 }

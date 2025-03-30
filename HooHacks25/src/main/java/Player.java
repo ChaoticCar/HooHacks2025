@@ -25,6 +25,12 @@ public class Player implements Entity, CombatEntity {
 
     private ArrayList<Item> inventory = new ArrayList();
 
+    // stats
+    private int health = 5;
+    private int maxHealth = 5;
+    private int strength = 1;
+    private int defense = 1;
+
     public Player() {
         // load the assets
         //loadImage();
@@ -125,20 +131,27 @@ public class Player implements Entity, CombatEntity {
 
     @Override
     public int getHealth() {
-        //TODO
-        return 5;
+        return health;
+    }
+
+    @Override
+    public int getMaxHealth() {
+        return maxHealth;
     }
 
     @Override
     public int getStrength() {
-        // TODO
-        return 1;
+        return strength;
     }
 
     @Override
     public int getDefense() {
-        // TODO
-        return 1;
+        return defense;
+    }
+
+    @Override
+    public void receiveDamage(int damage) {
+        health -= damage;
     }
 
     @Override
@@ -149,5 +162,14 @@ public class Player implements Entity, CombatEntity {
     @Override
     public String getName() {
         return "Player";
+    }
+
+    @Override
+    public String toString() {
+        return String.format("""
+            Player: {
+                health: %d/%d
+            }
+            """, health, maxHealth);
     }
 }
