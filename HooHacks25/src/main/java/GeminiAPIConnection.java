@@ -42,21 +42,23 @@ public class GeminiAPIConnection implements LLMAPIConnection {
 
     public void executeCombatResult(String combatDescription, CombatEntity initiator, ArrayList<CombatEntity> targets, int D20) {
 
-        CombatResultTools.initiator = initiator;
-        CombatResultTools.targets = targets;
+        CombatResultTools combatResultTools = new CombatResultTools(initiator, targets);
 
         String message = String.format("""
                 You are a creative D&D Dungeon Master in charge of a game. Describe the result of the following
-                round of combat after a %d die roll out of 20. After describing it, update the game to enforce the result, for example,
+                round of combat after a %d die roll out of 20. After describing it, update the game using inflictDamage and
+                 inflictDamageToInitiator to enforce the result, for example,
                 by dealing damage to various combatants. If you are missing stats and have no way to access them, just use your judgement.
 
                 %s.
                 """, D20, combatDescription);
 
-        List<ToolSpecification> toolSpecifications = ToolSpecifications.toolSpecificationsFrom(CombatResultTools.class);
+
+
+        //List<ToolSpecification> toolSpecifications = ToolSpecifications.toolSpecificationsFrom(CombatResultTools.class);
 
         System.out.println(UserMessage.from(message));
-        System.out.println(toolSpecifications);
+        //System.out.println(toolSpecifications);
 
         /*ChatRequest chatRequest = ChatRequest.builder()
                     .messages(UserMessage.from(message))
@@ -65,7 +67,7 @@ public class GeminiAPIConnection implements LLMAPIConnection {
 
         GameAssistant gameAssistant = AiServices.builder(GameAssistant.class)
                 .chatLanguageModel(gemini)
-                .tools(toolSpecifications)
+                .tools(combatResultTools)
                 .build();
 
         String combatResponse = gameAssistant.chat(message);
@@ -144,26 +146,31 @@ public class GeminiAPIConnection implements LLMAPIConnection {
 
     private static class CombatResultTools {
 
-        static CombatEntity initiator;
-        static ArrayList<CombatEntity> targets;
+        CombatEntity initiator;
+        ArrayList<CombatEntity> targets;
+
+        CombatResultTools(CombatEntity initiator, ArrayList<CombatEntity> targets) {
+            this.initiator = initiator;
+            this.targets = targets;
+        }
 
         @Tool("Get strength stat of initiator")
-        static public int getInitiatorStrength () {
+        public int getInitiatorStrength () {
             return initiator.getStrength();
         }
 
         @Tool("Get health stat of i-th target (of targets.get(i))")
-        static public int getTargetHealth (int i) {
+        public int getTargetHealth (int i) {
             return targets.get(i).getHealth();
         }
 
         @Tool("Get defense stat of i-th target (of targets.get(i))")
-        static public int getTargetDefense (int i) {
+        public int getTargetDefense (int i) {
             return targets.get(i).getDefense();
         }
 
         @Tool("Cause target at a given index of targets to receive a given amount of damage. Returned string confirms damage dealt.")
-        static public String inflictDamage(@P("index") double i, @P("damage") double damage) {
+        public String inflictDamage(@P("index") double i, @P("damage") double damage) {
             int index = (int) i;
             int dmg = (int) damage;
 
@@ -178,7 +185,7 @@ public class GeminiAPIConnection implements LLMAPIConnection {
         }
 
         @Tool("Inflict damage on initiator. This means something went particularly wrong, since it was the initiator's turn. Returned string confirms damage dealt.")
-        static public String inflictDamageToInitiator(@P("damage") double damage) {
+        public String inflictDamageToInitiator(@P("damage") double damage) {
             int dmg = (int) damage;
             initiator.receiveDamage(dmg);
             System.out.println("Inflicted " + dmg + " damage");

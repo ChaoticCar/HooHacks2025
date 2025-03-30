@@ -67,6 +67,11 @@ public class Hostile implements Entity, CombatEntity {
     }
 
     @Override
+    public boolean isPlayer() {
+        return false;
+    }
+
+    @Override
     public int getX() {
         return 0;
     }
