@@ -64,7 +64,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         for (Sprite sprite : game.getSprites()) {
             int xVal = sprite.getX();
             int yVal = sprite.getY();
-            if (sprite == player && movingLeft) {
+            if (sprite.isPlayer() && movingLeft) {
                 drawMirroredSprite(g, sprite, xVal, pOffset - yVal);
             } else {
                 sprite.draw(g, null, xVal, pOffset - yVal);

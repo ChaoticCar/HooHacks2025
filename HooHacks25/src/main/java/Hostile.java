@@ -73,12 +73,12 @@ public class Hostile implements Entity, CombatEntity {
 
     @Override
     public int getX() {
-        return 0;
+        return posX;
     }
 
     @Override
     public int getY() {
-        return 0;
+        return posY;
     }
 
     @Override
