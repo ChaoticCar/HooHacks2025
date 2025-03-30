@@ -77,9 +77,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         SituationGen.initialize();
 
         // Add action listeners for button presses
-        button1.addActionListener(this);
-        button2.addActionListener(this);
-        button3.addActionListener(this);
+        button1.addActionListener(this::handleButton1);
+        button2.addActionListener(this::handleButton2);
+        button3.addActionListener(this::handleButton3);
 
         button1.setText("Attack");
 
@@ -240,7 +240,27 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     }
 
     public void handleButton1(ActionEvent e) {
+        if (SituationGen.getTurnCount() != 0) {
+            continueCombat(button1.getText());
+        } else {
+            startCombat();
+        }
+    }
 
+    public void handleButton2(ActionEvent e) {
+        if (SituationGen.getTurnCount() != 0) {
+            continueCombat(button2.getText());
+        } else {
+            startCombat();
+        }
+    }
+
+    public void handleButton3(ActionEvent e) {
+        if (SituationGen.getTurnCount() != 0) {
+            continueCombat(button3.getText());
+        } else {
+            startCombat();
+        }
     }
 
     @Override
