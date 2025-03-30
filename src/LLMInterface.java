@@ -12,7 +12,7 @@ public class LLMInterface {
         StringBuilder description = new StringBuilder();
 
         switch (action) {
-            case ATTACK -> {
+            case ATTACK: {
                 String targetsName = "";
                 if (targets.size() == 1) {
                     targetsName = targets.get(0).getName();
@@ -35,7 +35,7 @@ public class LLMInterface {
                 }
                 description.append(".");
             }
-            case ITEM -> {
+            case ITEM: {
                 description.append(initiator.getName())
                        .append(" used a ")
                        .append(getItemName(item));
@@ -58,11 +58,11 @@ public class LLMInterface {
                 }
                 description.append(".");
             }
-            case RUN -> {
+            case RUN: {
                 description.append(initiator.getName())
                         .append(" decided to run away from combat.");
             }
-            default -> {
+            default: {
                 description.append("Unknown action performed by ")
                         .append(initiator.getName())
                         .append(".");
@@ -74,15 +74,15 @@ public class LLMInterface {
 
     private String getActionName (ActionType actionType) {
         switch (actionType) {
-            case ATTACK -> {
+            case ATTACK: {
                 return "attacked";
             }
-            case ITEM -> {
+            case ITEM: {
                 return "used";
             }
-            case RUN -> {
+            case RUN: {
                 return "ran away";
-            }   default -> {
+            } default: {
                 System.out.println("action hasn't been described yet: " + actionType);
                 return "";
             }
@@ -91,9 +91,9 @@ public class LLMInterface {
 
     private String getItemName (Item item) {
         switch (item) {
-            case SWORD -> {
+            case SWORD: {
                 return "sword";
-            } default -> {
+            } default: {
                 System.out.println("item hasn't been described yet: " + item);
                 return "item";
             }

@@ -29,21 +29,21 @@ public class OverworldState implements GameState {
         // TODO: replace with game logic to decide if player moves
         if (true) {
             switch (input) {
-                case UP -> {
+                case UP: {
                 }
-                case DOWN -> {
+                case DOWN: {
                     // player.moveDown
                 }
-                case LEFT -> {
+                case LEFT: {
                     player.setX(player.getX() - 1);
                 }
-                case RIGHT -> {
+                case RIGHT: {
                     player.setX(player.getX() + 1);
 
                 }
-                case BUTTON_A -> {
+                case BUTTON_A: {
                 }
-                case BUTTON_B -> {
+                case BUTTON_B: {
                 }
             }
                 //player.moveDown();
