@@ -95,7 +95,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private void drawMirroredSprite(Graphics g, Sprite sprite, int x, int y) {
         Graphics2D g2d = (Graphics2D) g;
         AffineTransform originalTransform = g2d.getTransform();
-        g2d.translate(x + sprite.getWidth(), y);
+        g2d.translate(x + pHeight, y);
         g2d.scale(-1, 1); // Flip horizontally
         sprite.draw(g2d, null, 0, 0); // Draw the sprite at the new origin
         g2d.setTransform(originalTransform); // Restore original transform
