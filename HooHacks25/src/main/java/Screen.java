@@ -19,9 +19,15 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     // controls the delay between each tick in ms
     private final int DELAY = 25;
     // controls the size of the board
-    public static final int TILE_SIZE = 50;
-    public static final int ROWS = 12;
-    public static final int COLUMNS = 18;
+    public static final int TILE_SIZE = 120;
+    private final int width = 1920;
+    private final int height = 1080;
+    private int pHeight = 338;
+    private int pWidth = 338;
+    private final int horizon = height/2;
+
+    private int pOffset = horizon - pHeight + 64;
+
 
     // suppress serialization warning
     private static final long serialVersionUID = 490905409104883233L;
@@ -31,21 +37,16 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private Timer timer;
 
     Game game;
-    //Player player;
- 
+    Player player;
 
-    public Screen(Game game){
+    public Screen(Game game, LLMInterface llmInterface){
 
         this.game = game;
 
         // set the game board size
-        setPreferredSize(new Dimension(TILE_SIZE * COLUMNS, TILE_SIZE * ROWS));
+        setPreferredSize(new Dimension(width, height));
         // set the game board background color
         setBackground(new Color(232, 232, 232));
-
-        // initialize the game state
-        //player = new Player();
-
 
         // this timer will call the actionPerformed() method every DELAY ms
         timer = new Timer(DELAY, this);
@@ -55,13 +56,18 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        g.setColor(Color.RED);
-        g.fillRect(50, 50, 100, 100); // Draws a red square
+        g.setColor(Color.BLACK);
+        g.fillRect(0, horizon, width, 3); // Draws a black line
 
         for (Sprite sprite : game.getSprites()) {
-            sprite.draw(g, null, 0, 0);
+            int xVal = sprite.getX();
+            int yVal = sprite.getY();
+            sprite.draw(g, null, xVal, pOffset - yVal);
         }
+    }
 
+    public int getHorizon() {
+        return horizon;
     }
 
     @Override
@@ -106,7 +112,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
     }
 
     @Override
@@ -117,24 +123,24 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // depending on which arrow key was pressed, we're going to move the player by
         // one whole tile for this input
         if (key == KeyEvent.VK_UP) {
-            game.handleInput(true, false, false, false);
+            game.handleInput(GameInput.UP);
         }
         if (key == KeyEvent.VK_RIGHT) {
-            game.handleInput(false, false, true, false);
+            game.handleInput(GameInput.RIGHT);
         }
         if (key == KeyEvent.VK_DOWN) {
-            game.handleInput(true, true, false, false);
+            game.handleInput(GameInput.DOWN);
         }
         if (key == KeyEvent.VK_LEFT) {
-            game.handleInput(true, false, false, true);
+            game.handleInput(GameInput.LEFT);
         }
-        throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyPressed'");
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
+        //throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 
     

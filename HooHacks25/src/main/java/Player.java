@@ -1,5 +1,4 @@
 //package src;
-
 import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
@@ -7,32 +6,46 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
 
 
 
-public class Player implements Entity {
+public class Player implements Entity, CombatEntity {
 
     // image that represents the player's position on the board
     private BufferedImage image;
     // current position of the player on the board grid
-    private Point pos;
+    //private Point pos;
+    private int posX;
+    private int posY;
     // keep track of the player's score
     private int score;
+
+    private ArrayList<Item> inventory = new ArrayList();
 
     public Player() {
         // load the assets
         //loadImage();
 
         // initialize the state
-        pos = new Point(0, 0);
+        posX = 0;
+        posY = 0;
         score = 0;
+        inventory.add(Item.SWORD);
     }
 
-    public Point getPosition() {
-        return pos;
+
+    public int getX() {
+        return posX;
     }
+    public int getY() {
+        return posY;
+    }
+
+    public void setX(int x) { posX = x; }
+
 
     /*
     private void loadImage() {
@@ -105,8 +118,36 @@ public class Player implements Entity {
         score += amount;
     }
 
-    public Point getPos() {
-        return pos;
+    @Override
+    public boolean isPlayerControlled() {
+        return true;
     }
 
+    @Override
+    public int getHealth() {
+        //TODO
+        return 5;
+    }
+
+    @Override
+    public int getStrength() {
+        // TODO
+        return 1;
+    }
+
+    @Override
+    public int getDefense() {
+        // TODO
+        return 1;
+    }
+
+    @Override
+    public ArrayList<Item> getInventory() {
+        return inventory;
+    }
+
+    @Override
+    public String getName() {
+        return "Player";
+    }
 }

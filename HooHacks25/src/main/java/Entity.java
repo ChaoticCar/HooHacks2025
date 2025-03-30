@@ -4,5 +4,6 @@ import java.awt.*;
 
 public interface Entity {
 
-    Point getPosition ();
+    public int getX();
+    public int getY();
 }

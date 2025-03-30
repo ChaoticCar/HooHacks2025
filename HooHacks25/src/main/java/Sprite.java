@@ -20,9 +20,17 @@ public class Sprite {
 
         this.defaultImgPath = imgPath;
         this.entity = entity;
+        System.out.println(entity);
 
         // load assets
         loadDefaultImage();
+    }
+
+    public int getX() {
+        return entity.getX();
+    }
+    public int getY() {
+        return entity.getY();
     }
 
     public void draw(Graphics g, ImageObserver observer, int x, int y) {
@@ -30,13 +38,7 @@ public class Sprite {
         // pos.x reliably returns an int. https://stackoverflow.com/a/30220114/4655368
         // this is also where we translate board grid position into a canvas pixel
         // position by multiplying by the tile size.
-        Point pos = entity.getPosition();
-        g.drawImage(
-                image,
-                pos.x + x * Screen.TILE_SIZE,
-                pos.y + y * Screen.TILE_SIZE,
-                observer
-        );
+        g.drawImage(image,x,y,observer);
     }
 
     private void loadDefaultImage() {
