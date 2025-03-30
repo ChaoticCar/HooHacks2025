@@ -11,7 +11,7 @@ public class Game {
     private ArrayList<Sprite> sprites;
 
     private Player player;
-    private ArrayList<Hostile> hostiles;
+//    private ArrayList<Hostile> hostiles;
 
     public Game (LLMInterface llmInterface) {
 
@@ -20,8 +20,8 @@ public class Game {
         sprites = new ArrayList<>();
 
         player = new Player();
-        hostiles = new ArrayList<>();
-        hostiles.add(new Hostile(5, "Giant Spider", 5, 1, 1, 10, 0));
+//        hostiles = new ArrayList<>();
+//        hostiles.add(new Hostile(5, "Giant Spider", 5, 1, 1, 10, 0));
 
         Sprite playerSprite = new Sprite(".\\HooHacks25\\images\\player.png", player);
 
@@ -34,7 +34,7 @@ public class Game {
     public Player getPlayer() {
         return player;
     }
-    public ArrayList<Hostile> getHostiles() { return hostiles; }
+//    public ArrayList<Hostile> getHostiles() { return hostiles; }
 
     public ArrayList<Sprite> getSprites() {
         return sprites;
