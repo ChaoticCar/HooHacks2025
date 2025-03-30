@@ -51,10 +51,10 @@ public class OverworldState implements GameState {
                     ArrayList<CombatEntity> playerSide = new ArrayList<>();
                     playerSide.add(player);
 
-                    ArrayList<CombatEntity> enemySide = new ArrayList<>(game.getHostiles());
+//                    ArrayList<CombatEntity> enemySide = new ArrayList<>(game.getHostiles());
                     System.out.println("Entering combat phase");
 
-                    return new CombatState(game, playerSide, enemySide);
+//                    return new CombatState(game, playerSide, enemySide);
                 } case BUTTON_Y: {
 
                 }

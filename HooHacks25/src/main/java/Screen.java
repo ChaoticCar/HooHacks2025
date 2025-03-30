@@ -16,7 +16,8 @@ import javax.swing.Timer;
 
 public class Screen extends JPanel implements ActionListener, KeyListener, MouseListener {
 
-    // controls the final int DELAY = 25;
+    // controls the delay between each tick in ms
+    private final int DELAY = 25;
     // controls the size of the board
     public static final int TILE_SIZE = 120;
     private final int width = 1920;
@@ -39,7 +40,6 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     private String playerScenario = "";
     private String monsterScenario = "";
     private boolean movingLeft = false;
-    private String[] playerOptions = new String[3];
 
     public Screen(Game game, LLMInterface llmInterface) {
         this.game = game;
@@ -64,7 +64,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         for (Sprite sprite : game.getSprites()) {
             int xVal = sprite.getX();
             int yVal = sprite.getY();
-            if (sprite.isPlayer() && movingLeft) {
+            if (sprite == player && movingLeft) {
                 drawMirroredSprite(g, sprite, xVal, pOffset - yVal);
             } else {
                 sprite.draw(g, null, xVal, pOffset - yVal);
@@ -90,18 +90,6 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
             g.setFont(new Font("Arial", Font.PLAIN, 14));
             g.drawString(monsterScenario, width / 2 + 20, 50);
         }
-
-        // Draw player options if available
-        if (playerOptions[0] != null) {
-            g.setColor(Color.WHITE);
-            g.fillRect(10, 120, width - 20, 100);
-            g.setColor(Color.BLACK);
-            g.drawRect(10, 120, width - 20, 100);
-            g.setFont(new Font("Arial", Font.PLAIN, 14));
-            for (int i = 0; i < playerOptions.length; i++) {
-                g.drawString((i + 1) + ". " + playerOptions[i], 20, 150 + (i * 20));
-            }
-        }
     }
 
     private void drawMirroredSprite(Graphics g, Sprite sprite, int x, int y) {
@@ -122,13 +110,89 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         repaint();
     }
 
-    public void updateOptions(String[] options) {
-        playerOptions = options;
-        repaint();
-    }
-
     private void movePlayer(int dx) {
         player.setX(player.getX() + dx);
         movingLeft = dx < 0;
+    }
+
+    private void startCombat() {
+        // Logic to start combat
+        String scenario = SituationGen.run(0, null); // Start with player's turn and no current monster
+        updateScenario(scenario, true); // Update the scenario for the player
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        // this method is called by the timer every DELAY ms.
+        // use this space to update the state of your game or animation
+        // before the graphics are redrawn.
+
+        // prevent the player from disappearing off the board
+        // player.tick();
+
+        // calling repaint() will trigger paintComponent() to run again,
+        // which will refresh/redraw the graphics.
+        repaint();
+    }
+
+    @Override
+    public void mousePressed(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseEntered(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
+
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'keyTyped'");
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
+
+        // depending on which arrow key or 'A'/'D' key was pressed, we're going to move the player by one whole tile for this input
+        if (key == KeyEvent.VK_UP) {
+            game.handleInput(GameInput.UP);
+        }
+        if (key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) {
+            movePlayer(TILE_SIZE);
+            game.handleInput(GameInput.RIGHT);
+        }
+        if (key == KeyEvent.VK_DOWN) {
+            game.handleInput(GameInput.DOWN);
+        }
+        if (key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) {
+            movePlayer(-TILE_SIZE);
+            game.handleInput(GameInput.LEFT);
+        }
+        if (key == KeyEvent.VK_E) {
+            startCombat();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
+        // TODO Auto-generated method stub
+        // throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 }
