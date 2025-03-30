@@ -2,6 +2,14 @@ import java.util.ArrayList;
 
 public class LLMInterface {
 
+    // LLMConnection llmConnection;
+    /*
+    LLMInterface(LLMConnection llmConnection) {
+        this.llmConnection = llmCon
+    }
+
+     */
+
     public void startCombatAction(CombatState combatState, CombatEntity initiator,
                                   CombatEntity target, ActionType action, Item item) {
 
