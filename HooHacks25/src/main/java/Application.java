@@ -7,6 +7,8 @@ class Application {
     static Game game;
 
     public static void main(String[] args) {
+
+        APITest.run();
         // invokeLater() is used here to prevent our graphics processing from
         // blocking the GUI. https://stackoverflow.com/a/22534931/4655368
         // this is a lot of boilerplate code that you shouldn't be too concerned about.
