@@ -26,7 +26,7 @@ public class GeminiAPIConnection implements LLMAPIConnection {
         this.llmInterface = new LLMInterface(this);
 
         gemini = GoogleAiGeminiChatModel.builder()
-            .apiKey(APIKey.PROKEY)
+            .apiKey(APIKey.GEMINI_APIKey)
             .modelName("gemini-1.5-flash")
             .build();
 

@@ -13,7 +13,7 @@ public class APITest {
         System.out.println("We got here!");
 
         StreamingChatLanguageModel gemini = GoogleAiGeminiStreamingChatModel.builder()
-                .apiKey(APIKey.PROKEY)
+                .apiKey(APIKey.GEMINI_APIKey)
                 .modelName("gemini-1.5-flash")
                 .build();
 
