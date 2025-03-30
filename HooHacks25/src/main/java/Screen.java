@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.FontMetrics; // Added import for FontMetrics
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
@@ -12,7 +13,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
-import javax.swing.*;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class Screen extends JPanel implements ActionListener, KeyListener, MouseListener {
 
@@ -114,25 +117,22 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // Draw the player scenario text box if there is text
         if (!playerScenario.isEmpty()) {
             g.setColor(Color.WHITE);
-            g.fillRect(10, 10, width / 2 - 20, 100);
+            g.fillRect(10, 10, 3*width/5 - 20, 150);
             g.setColor(Color.BLACK);
-            g.drawRect(10, 10, width / 2 - 20, 100);
+            g.drawRect(10, 10, 3*width/5 - 20, 150);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
-            drawString(g, playerScenario, 20, 50);
-            //g.drawString(playerScenario, 20, 50);
+            drawString(g, playerScenario, 20, 30, width / 2 - 40, 80); // Adjusted for text wrapping
 
         }
 
         // Draw the monster scenario text box if there is text
         if (!monsterScenario.isEmpty()) {
             g.setColor(Color.WHITE);
-            g.fillRect(width / 2 + 10, 10, width / 2 - 20, 100);
+            g.fillRect(10, 10, 3*width/5 - 20, 150);
             g.setColor(Color.BLACK);
-            g.drawRect(width / 2 + 10, 10, width / 2 - 20, 100);
+            g.drawRect(10, 10, 3*width/5 - 20, 150);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
-            //g.drawString(monsterScenario, width / 2 + 20, 50);
-            drawString(g, monsterScenario, width / 2 + 20, 50);
-
+            drawString(g, monsterScenario, width / 2 + 20, 30, width / 2 - 40, 80); // Adjusted for text wrapping
         }
         drawHealthBar(g);
 
@@ -165,7 +165,7 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
 
         // Current HP
         g2d.setColor(Color.RED);
-        g2d.fillRect(x, y, (barWidth * (health / max)), barHeight);
+        g2d.fillRect(x, y,(int)((double)(barWidth * (health / max))), barHeight);
 
         // Border of the HP bar
         g2d.setColor(Color.BLACK);
@@ -324,15 +324,24 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // throw new UnsupportedOperationException("Unimplemented method 'keyReleased'");
     }
 
-    public void drawString(Graphics g, String text, int x, int y) {
-        if (text.contains("\n")) {
-            String[] texts = text.split("\n");
-            for (String txt : texts) {
-                g.drawString(txt, x, y);
-                y += textLineOffset;
+    public void drawString(Graphics g, String text, int x, int y, int width, int height) {
+        FontMetrics metrics = g.getFontMetrics();
+        int lineHeight = metrics.getHeight();
+        int currentX = x;
+        int currentY = y + metrics.getAscent() - 12;
+
+        String[] words = text.split(" ");
+        for (String word : words) {
+            int wordWidth = metrics.stringWidth(word + " ");
+            if (currentX + wordWidth > x + width + 200) {
+                currentY += lineHeight;
+                currentX = x;
             }
-        } else {
-            g.drawString(text, x, y);
+            if (currentY > y + height + 62) {
+                break; // Stop drawing if text exceeds box height
+            }
+            g.drawString(word, currentX, currentY);
+            currentX += wordWidth;
         }
     }
 }

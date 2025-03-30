@@ -65,15 +65,21 @@ public class SituationGen {
         int d20Roll = rollD20();
         System.out.println("Simulated d20 Roll: " + d20Roll);
 
-        String prompt = createScenarioPrompt(d20Roll, turn, currentMonster, playerAction);
-        //prompt = .";
-
+        String prompt = "Before each turn pull how much health the monster and the player have,\" +\n" +
+                 "then deduct the damage from the target's health, using the combat tools and make a corresponding" +
+                "situation if the target dies. Also don't do more damage than their max health" +
+                "Instead do something closer to 2/3 or 1/2. Also try to keep the situation under 600 words"
+                + createScenarioPrompt(d20Roll, turn, currentMonster, playerAction);
         System.out.println("Sending Prompt to Gemini:\n\"" + prompt + "\"\n---");
 
         CountDownLatch latch = new CountDownLatch(1);
         StringBuilder scenario = new StringBuilder();
 
         turnCounter++;
+        prompt = "Before each turn pull how much health the monster and the player have," +
+                " then deduct the damage from the target's health, using the combat tools and make a corresponding " +
+                "situation in case the target dies"+ prompt;
+
         return gameAssistant.chat(prompt/*, new StreamingChatResponseHandler() {
             @Override
             public void onPartialResponse(String partialResponse) {
@@ -112,22 +118,21 @@ public class SituationGen {
         if (turn % 2 == 0) {
             return String.format(
                     "You are a creative Dungeons & Dragons Dungeon Master. " +
-                            "It's my turn in combat. I wield a sword, chose \"%s\" as my actions, and rolled a %d on a D20. " +
-                            "The higher the roll, the more likely my attack succeeds. " +
-                            "Describe my action against the %s, including its effectiveness, impact on the opponent, " +
-                            "damage done, and any environmental details that enhance the scene. " +
-                            "Provide three options for my next move, set those options to the player's actions, " +
-                            "and always call tool methods to update the game state. This is turn %d.", playerAction, rollResult, monster.getName(), turn
+                    "It's my turn in combat. I wield a sword, chose \"%s\", and rolled a %d on a D20. " +
+                    "The higher the roll, the more likely my attack succeeds. " +
+                    "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
+                    "damage done, and any environmental details that enhance the scene. " +
+                    "Provide three options for my next move, and call tool methods to update" +
+                    " the game state. This is turn %d.", playerAction, rollResult, monster.getName(), turn
             );
         } else {
             return String.format(
                     "You are a creative Dungeons & Dragons Dungeon Master. " +
-                            "It's my opponent's turn in combat. They are a fearsome %s and rolled a %d on a D20. " +
-                            "I chose \"%s\" as my action. The higher the roll, the more likely their attack succeeds. " +
-                            "Describe their attack, including its effectiveness, impact on me, " +
-                            "damage done, and any environmental details that enhance the scene. " +
-                            "Provide three options for my next move, and call tool methods to update the game state" +
-                            ". This is turn %d.", monster.getName(), rollResult, playerAction, turn
+                    "It's my opponent's turn in combat. They are a fearsome %s and rolled a %d on a D20. " +
+                    "I chose \"%s\". The higher the roll, the more likely their attack succeeds. " +
+                    "Describe their attack, including its effectiveness, impact on me, " +
+                    "damage done, and any environmental details that enhance the scene. " +
+                    "Provide three options for my next move, and call. This is turn %d.", monster.getName(), rollResult, turn
             );
         }
     }
@@ -154,42 +159,36 @@ public class SituationGen {
 
         @Tool("Get health stat of player")
         public int getPlayerHealth () {
-            System.out.println("checked player health");
             return player.getHealth();
         }
 
         @Tool("Get strength stat of player")
         public int getPlayerStrength () {
-            System.out.println("checked player strength");
             return player.getStrength();
         }
 
         @Tool("Get defense stat of player")
         public int getPlayerDefense () {
-            System.out.println("checked player defense");
             return player.getDefense();
         }
 
         @Tool("Get health stat of monster")
         public int getMonsterHealth () {
-            System.out.println("checked monster health");
             return monster.getHealth();
         }
 
-        @Tool("Get strength stat of monster")
+        @Tool("Get defense stat of monster")
         public int getMonsterStrength () {
-            System.out.println("checked monster strength");
             return monster.getStrength();
         }
 
         @Tool("Get defense stat of monster")
         public int getMonsterDefense () {
-            System.out.println("checked monster defense");
             return monster.getDefense();
         }
 
-        @Tool("Set player's next actions as you described them")
-        public void setPlayerAction(@P("Action 1") String action1, @P("Action 2") String action2, @P("Action 3") String action3) {
+        @Tool("Set player's next actions")
+        public void setPlayerAction(String action1, String action2, String action3) {
             playerActions.set(0, action1);
             playerActions.set(1, action2);
             playerActions.set(2, action3);
@@ -254,7 +253,7 @@ public class SituationGen {
         public void inflictDamageToPlayer(@P("damage") int damage) {
             //int dmg = (int) damage;
             player.receiveDamage(damage);
-            System.out.println("Inflicted " + damage + " damage on " + player.getName());
+            System.out.println("Inflicted " + damage + " damage");
             //return "Inflicted " + damage + " damage";
         }
 
