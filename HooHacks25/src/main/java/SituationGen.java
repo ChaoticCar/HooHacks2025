@@ -195,6 +195,18 @@ public class SituationGen {
             playerActions.set(2, action3);
         }
 
+        @Tool("Detect if player is dead (return true if dead)")
+        public boolean isPlayerDead() {
+            System.out.println("checked player life");
+            return player.getHealth() < 0;
+        }
+
+        @Tool("Detect if monster is dead (return true if dead)")
+        public boolean isMonsterDead() {
+            System.out.println("checked monster life");
+            return monster.getHealth() < 0;
+        }
+
         /*
         For if we have multiple monsters
         @Tool("Get health stat of i-th monster (of monsters.get(i))")
