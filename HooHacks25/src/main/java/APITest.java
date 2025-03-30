@@ -17,7 +17,7 @@ public class APITest {
                 .modelName("gemini-1.5-flash")
                 .build();
 
-        CompletableFuture<ChatResponse> futureResponse = new CompletableFuture<>();
+        CompletableFuture<ChatResponse> response = new CompletableFuture<>();
 
         gemini.chat("Tell me a joke about Java", new StreamingChatResponseHandler() {
 
@@ -28,25 +28,15 @@ public class APITest {
 
             @Override
             public void onCompleteResponse(ChatResponse completeResponse) {
-                futureResponse.complete(completeResponse);
+                response.complete(completeResponse);
             }
 
             @Override
             public void onError(Throwable error) {
-                futureResponse.completeExceptionally(error);
+                response.completeExceptionally(error);
             }
         });
 
-        futureResponse.join();
-
-        try {
-            ChatResponse response = futureResponse.get();
-            System.out.println(response.aiMessage().text());
-        } catch (InterruptedException exception) {
-
-            System.out.println("Thread was interrupted!");
-        } catch (ExecutionException exception) {
-            System.out.println("Chat message was aborted before it completed");
-        }
+        response.join();
     }
 }
