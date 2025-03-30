@@ -42,7 +42,9 @@ public class Player implements Entity, CombatEntity {
         inventory.add(Item.SWORD);
     }
 
-
+    public boolean isPlayer() {
+        return true;
+    }
     public int getX() {
         return posX;
     }
