@@ -117,9 +117,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // Draw the player scenario text box if there is text
         if (!playerScenario.isEmpty()) {
             g.setColor(Color.WHITE);
-            g.fillRect(10, 10, 3*width/5 - 20, 150);
+            g.fillRect(10, 10, 3 * width / 5, 150);
             g.setColor(Color.BLACK);
-            g.drawRect(10, 10, 3*width/5 - 20, 150);
+            g.drawRect(10, 10, 3 * width / 5, 150);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
             drawString(g, playerScenario, 20, 30, width / 2 - 40, 80); // Adjusted for text wrapping
 
@@ -128,9 +128,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
         // Draw the monster scenario text box if there is text
         if (!monsterScenario.isEmpty()) {
             g.setColor(Color.WHITE);
-            g.fillRect(10, 10, 3*width/5 - 20, 150);
+            g.fillRect(10, 10, 3 * width / 5 - 20, 150);
             g.setColor(Color.BLACK);
-            g.drawRect(10, 10, 3*width/5 - 20, 150);
+            g.drawRect(10, 10, 3 * width / 5 - 20, 150);
             g.setFont(new Font("Arial", Font.PLAIN, 14));
             drawString(g, monsterScenario, width / 2 + 20, 30, width / 2 - 40, 80); // Adjusted for text wrapping
         }
@@ -192,6 +192,9 @@ public class Screen extends JPanel implements ActionListener, KeyListener, Mouse
     }
 
     private void startCombat() {
+        System.out.println("starting combat");
+
+
         // Logic to start combat
         String scenario = SituationGen.run(0, player, game.getMonster(), "Attack"); // Start with player's turn and no current monster
         String[] words = scenario.split(" ");
