@@ -25,7 +25,7 @@ public class Sprite {
         // load assets
         loadDefaultImage();
     }
-
+    public boolean isPlayer(){return entity.isPlayer();}
     public int getX() {
         return entity.getX();
     }

@@ -3,49 +3,51 @@ import dev.langchain4j.model.chat.response.ChatResponse;
 import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
 import dev.langchain4j.model.googleai.GoogleAiGeminiStreamingChatModel;
 
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class SituationGen {
 
+    private static String currentMonster;
+    private static int turnCounter = 0;
+
     public static void main(String[] args) {
-        System.out.println(run());
+        String scenario = run(0, null);    // Start the battle
+        System.out.println("\nFinal Scenario:\n" + scenario);
+        // Generate the image based on the scenario and save it in the image folder
     }
 
-    public static String run() {
-        System.out.println("We got here!");
+    public static String run(int turn, String monster) {
+        currentMonster = monster;
 
-        // Initialize the Gemini model
         StreamingChatLanguageModel gemini = GoogleAiGeminiStreamingChatModel.builder()
-                .apiKey(APIKey.GEMINI_APIKey)
-                .modelName("gemini-1.5-flash")
+                .apiKey(APIKey.PROKEY)
+                .modelName("gemini-2.0-flash")
                 .build();
 
-        // Simulate a single d20 roll
+        if (turn == 0) {
+            currentMonster = monster != null ? monster : getMonster();
+        }
+
         int d20Roll = rollD20();
         System.out.println("Simulated d20 Roll: " + d20Roll);
 
-        // Construct the prompt based on the d20 roll
-        String prompt = createScenarioPrompt(d20Roll);
+        String prompt = createScenarioPrompt(d20Roll, turn, currentMonster);
         System.out.println("Sending Prompt to Gemini:\n\"" + prompt + "\"\n---");
 
-        // Create a latch to block the main thread until the async task completes
         CountDownLatch latch = new CountDownLatch(1);
         StringBuilder scenario = new StringBuilder();
 
-        // Generate the Scenario using the Gemini Model
         gemini.chat(prompt, new StreamingChatResponseHandler() {
             @Override
             public void onPartialResponse(String partialResponse) {
-                System.out.print(partialResponse);  // Print partial responses
+                System.out.print(partialResponse);
                 scenario.append(partialResponse);
             }
 
             @Override
             public void onCompleteResponse(ChatResponse completeResponse) {
-                latch.countDown();  // Signal completion
+                latch.countDown();
             }
 
             @Override
@@ -55,7 +57,6 @@ public class SituationGen {
             }
         });
 
-        // Block until the latch is released
         try {
             latch.await();
         } catch (InterruptedException e) {
@@ -63,38 +64,35 @@ public class SituationGen {
             return "Error: " + e.getMessage();
         }
 
-        // Return the final scenario
+        turnCounter++;
         return scenario.toString();
     }
 
-    /**
-     * Simulates rolling a 20-sided die.
-     * @return An integer between 1 and 20 (inclusive).
-     */
     private static int rollD20() {
         return ThreadLocalRandom.current().nextInt(1, 21);
     }
 
-    /**
-     * Creates the prompt string to send to Gemini, incorporating the d20 roll.
-     * @param rollResult The result of the d20 roll (1-20).
-     * @return A formatted prompt string.
-     */
-    private static String createScenarioPrompt(int rollResult) {
-        return String.format(
-                "You are a creative Dungeons & Dragons Dungeon Master. " +
-                        "I just rolled a d20 to determine the nature of a random combat encounter, and the result was %d. " +
-                        "Interpret this roll where 1 represents a trivially easy encounter, " +
-                        "10 represents a standard, balanced encounter, " +
-                        "and 20 represents a very difficult, challenging encounter. " +
-                        "Based *only* on this d20 roll of %d, describe a brief D&D combat scenario suitable for a party of adventurers. " +
-                        "Include the following details:\n" +
-                        "- Location: An evocative location description.\n" +
-                        "- Monsters: 1 to 3 types of thematic monsters.\n" +
-                        "- Numbers: The approximate number of monsters.\n" +
-                        "- Setup: A short sentence describing the initial situation.\n" +
-                        "Ensure the challenge directly reflects the d20 roll of %d.",
-                rollResult, rollResult, rollResult
-        );
+    private static String createScenarioPrompt(int rollResult, int turn, String monster) {
+        if (turn % 2 == 0) {
+            return String.format(
+                    "You are a creative Dungeons & Dragons Dungeon Master. " +
+                            "It's my turn in combat. I wield a sword and rolled a %d on a D20. " +
+                            "The higher the roll, the more likely my attack succeeds. " +
+                            "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
+                            "and any environmental details that enhance the scene. This is turn %d.", rollResult, monster, turn
+            );
+        } else {
+            return String.format(
+                    "You are a creative Dungeons & Dragons Dungeon Master. " +
+                            "It's my opponent's turn in combat. They are a fearsome %s and rolled a %d on a D20. " +
+                            "The higher the roll, the more likely their attack succeeds. " +
+                            "Describe their attack, including its effectiveness, impact on me, " +
+                            "and any environmental details that enhance the scene. This is turn %d.", monster, rollResult, turn
+            );
+        }
+    }
+
+    private static String getMonster() {
+        return currentMonster;
     }
 }
