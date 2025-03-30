@@ -8,17 +8,20 @@ out/
 !**/src/test/**/out/
 
 ### Gradle """
-!**/.gradle
-HooHacks25/.gradle
-!**/.build
-HooHacks25/.build
-HooHacks25/build
+**/.gradle/
+HooHacks25/.gradle/
+**/.build/
+HooHacks25/.build/
+**/build/
+HooHacks25/build/
+**/bin/
+HooHacks25/bin/
 
-!**/gradle
-HooHacks25/gradle
+**/gradle/
+HooHacks25/gradle/
 
-!**/gradlew
-HooHacks25/gradlew
+**/gradlew/
+HooHacks25/gradlew/
 
 ### VS Code ###
 .vscode/
