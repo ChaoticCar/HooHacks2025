@@ -65,20 +65,20 @@ public class SituationGen {
         int d20Roll = rollD20();
         System.out.println("Simulated d20 Roll: " + d20Roll);
 
-        String prompt = "Before each turn pull how much health the monster and the player have,\" +\n" +
-                 "then deduct the damage from the target's health, using the combat tools and make a corresponding" +
-                "situation if the target dies. Also don't do more damage than their max health" +
-                "Instead do something closer to 2/3 or 1/2. Also try to keep the situation under 600 words"
-                + createScenarioPrompt(d20Roll, turn, currentMonster, playerAction);
+        String prompt = //"Before each turn pull how much health the monster and the player have,\" +\n" +
+                 //"then deduct the damage from the target's health, using the combat tools and make a corresponding" +
+                //"situation if the target dies. Also don't do more damage than their max health" +
+                //"Instead do something closer to 2/3 or 1/2. Also try to keep the situation under 600 words +"
+                createScenarioPrompt(d20Roll, turn, currentMonster, playerAction);
         System.out.println("Sending Prompt to Gemini:\n\"" + prompt + "\"\n---");
 
         CountDownLatch latch = new CountDownLatch(1);
         StringBuilder scenario = new StringBuilder();
 
         turnCounter++;
-        prompt = "Before each turn pull how much health the monster and the player have," +
-                " then deduct the damage from the target's health, using the combat tools and make a corresponding " +
-                "situation in case the target dies"+ prompt;
+        //prompt = "Before each turn pull how much health the monster and the player have," +
+          //      " then deduct the damage from the target's health, using the combat tools and make a corresponding " +
+            //    "situation in case the target dies"+ prompt;
 
         return gameAssistant.chat(prompt/*, new StreamingChatResponseHandler() {
             @Override
@@ -122,7 +122,7 @@ public class SituationGen {
                     "The higher the roll, the more likely my attack succeeds. " +
                     "Describe my attack on the %s, including its effectiveness, impact on the opponent, " +
                     "damage done, and any environmental details that enhance the scene. " +
-                    "Provide three options for my next move, and call tool methods to update" +
+                    "Provide three options for my next move, set the player's actions to those options, and call tool methods to update" +
                     " the game state. This is turn %d.", playerAction, rollResult, monster.getName(), turn
             );
         } else {
@@ -132,7 +132,7 @@ public class SituationGen {
                     "I chose \"%s\". The higher the roll, the more likely their attack succeeds. " +
                     "Describe their attack, including its effectiveness, impact on me, " +
                     "damage done, and any environmental details that enhance the scene. " +
-                    "Provide three options for my next move, and call. This is turn %d.", monster.getName(), rollResult, turn
+                    "Provide three options for my next move, set the player's actions to those options, and call tool methods to update the game state. This is turn %d.", monster.getName(), rollResult, playerAction, turn
             );
         }
     }
@@ -188,7 +188,7 @@ public class SituationGen {
         }
 
         @Tool("Set player's next actions")
-        public void setPlayerAction(String action1, String action2, String action3) {
+        public void setPlayerAction(@P("action 1") String action1, @P("action 2") String action2, @P("action 3") String action3) {
             playerActions.set(0, action1);
             playerActions.set(1, action2);
             playerActions.set(2, action3);
